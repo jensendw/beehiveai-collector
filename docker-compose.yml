@@ -1,0 +1,9 @@
+version: '2'
+services:
+  beehiveai-collector:
+    image: jensendw/beehiveai-collector
+    environment:
+      - BEEHIVEAI_MARATHON_URL=https://marathon
+      - BEEHIVEAI_JENKINS_URL=https://jenkins
+      - BEEHIVEAI_CHECK_INTERVAL=300
+      - BEEHIVEAI_TOKEN=xxxxx
