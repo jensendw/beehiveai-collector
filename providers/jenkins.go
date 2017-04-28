@@ -17,7 +17,7 @@ type JenkinsJob struct {
 func JenkinsCollector() {
 	auth := setCredentials()
 
-	jenkins := gojenkins.NewJenkins(auth, "https://jenkins-ops.origami42.com")
+	jenkins := gojenkins.NewJenkins(auth, Config.JenkinsURL)
 
 	var jenkinsJobs []JenkinsJob
 
