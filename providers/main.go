@@ -1,4 +1,4 @@
-package main
+package providers
 
 import (
 	"github.com/jensendw/beehiveai-collector/config"
@@ -7,7 +7,3 @@ import (
 
 var Config = config.LoadConfig().(*config.Configuration)
 var Logger = *logger.Logger
-
-func main() {
-	ScheduleRunChecks()
-}
