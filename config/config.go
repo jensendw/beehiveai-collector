@@ -1,9 +1,12 @@
 package config
 
 import (
-	"fmt"
+	"github.com/jensendw/beehiveai-collector/logger"
 	"github.com/kelseyhightower/envconfig"
+	"os"
 )
+
+var Logger = *logger.Logger
 
 // Configuration stores the configuration data
 type Configuration struct {
@@ -22,8 +25,9 @@ func LoadConfig() interface{} {
 	var s Configuration
 	err := envconfig.Process("beehiveai", &s)
 	if err != nil {
-		fmt.Println(err.Error())
-		//lshoudl really exit here
+		Logger.Error(err.Error())
+		os.Exit(2)
+
 	}
 	return &s
 }
