@@ -4,6 +4,7 @@ import (
 	"fmt"
 	marathon "github.com/gambol99/go-marathon"
 	"github.com/jensendw/beehiveai-go"
+	"net/url"
 	"strconv"
 	"strings"
 )
@@ -11,6 +12,7 @@ import (
 // Service struct to store details we care about for each service
 // then instantiate into a slice for each service
 type Service struct {
+	ID           string
 	Name         string
 	Instances    []string
 	TasksRunning int
@@ -38,6 +40,7 @@ func MarathonCollector() {
 	for _, application := range applications.Apps {
 		service := Service{}
 		service.Name = convertMarathonID(application.ID)
+		service.ID = application.ID
 
 		details, err := client.Application(application.ID)
 		if err != nil {
@@ -73,7 +76,8 @@ func assembleText(service Service) string {
 	tasksRunning := strconv.Itoa(service.TasksRunning)
 	health := strconv.FormatBool(service.Health)
 	name := service.Name
-	return fmt.Sprintf("Name: %v\nNumber of tasks: %v\nInstances:\n %v\nHealthy: %v\n", name, tasksRunning, instances, health)
+	marathonURL := generateMarathonURL(service.ID, Config.MarathonURL)
+	return fmt.Sprintf("Name: %v\nLink: %v\nNumber of tasks: %v\nInstances:\n %v\nHealthy: %v\n", name, marathonURL, tasksRunning, instances, health)
 }
 
 func convertMarathonID(id string) string {
@@ -82,4 +86,20 @@ func convertMarathonID(id string) string {
 		return thestring[1:len(thestring)]
 	}
 	return thestring
+}
+
+//Determines if path should contain group or apps as part of URL
+func pathType(path string) string {
+	pathCount := strings.Count(path, "/")
+	switch {
+	case pathCount > 1:
+		return "group"
+	default:
+		return "apps"
+	}
+}
+
+//Creates the url to the application in marathon
+func generateMarathonURL(appId string, marathonURL string) string {
+	return fmt.Sprintf("%v/ui/#/apps/%s", marathonURL, url.PathEscape(appId))
 }

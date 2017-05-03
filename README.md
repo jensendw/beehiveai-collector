@@ -1,4 +1,4 @@
-#BeeHiveAI-Collector
+# BeeHiveAI-Collector
 Sends local system level data to the beehive AI custom integration API
 
 ## Configuration

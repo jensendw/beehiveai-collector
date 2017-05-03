@@ -15,7 +15,7 @@ type JenkinsJob struct {
 
 //JenkinsCollector - kicks off the process to collect data from jenkins
 func JenkinsCollector() {
-	auth := setCredentials()
+	auth := setCredentials(Config.JenkinsUsername, Config.JenkinsPassword)
 
 	jenkins := gojenkins.NewJenkins(auth, Config.JenkinsURL)
 
@@ -40,11 +40,11 @@ func JenkinsCollector() {
 }
 
 //Sets the credentials if any were configured
-func setCredentials() *gojenkins.Auth {
-	if (Config.JenkinsUsername != "") || (Config.JenkinsPassword != "") {
+func setCredentials(jenkinsUsername string, jenkinsPassword string) *gojenkins.Auth {
+	if (jenkinsUsername != "") || (jenkinsPassword != "") {
 		auth := &gojenkins.Auth{
-			Username: Config.JenkinsUsername,
-			ApiToken: Config.JenkinsPassword,
+			Username: jenkinsUsername,
+			ApiToken: jenkinsPassword,
 		}
 		return auth
 	}

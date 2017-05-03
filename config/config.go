@@ -1,6 +1,7 @@
 package config
 
 import (
+	"flag"
 	"github.com/jensendw/beehiveai-collector/logger"
 	"github.com/kelseyhightower/envconfig"
 	"os"
@@ -25,9 +26,11 @@ func LoadConfig() interface{} {
 	var s Configuration
 	err := envconfig.Process("beehiveai", &s)
 	if err != nil {
-		Logger.Error(err.Error())
-		os.Exit(2)
-
+		//checks to see if we are running tests
+		if flag.Lookup("test.v") == nil {
+			Logger.Error(err.Error())
+			os.Exit(2)
+		}
 	}
 	return &s
 }
